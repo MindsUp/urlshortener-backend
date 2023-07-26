@@ -1,20 +1,18 @@
 package com.mindsup.shrinkl.core.user
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.mindsup.shrinkl.core.user.model.User
+import com.mindsup.shrinkl.core.user.domain.User
 import com.mindsup.shrinkl.entrypoint.user.UserFacade
 import com.mindsup.shrinkl.entrypoint.user.payload.UserCreateRequest
 import com.mindsup.shrinkl.entrypoint.user.payload.UserListResponse
 import com.mindsup.shrinkl.entrypoint.user.payload.UserResponse
-import org.springframework.stereotype.Service as Servicuzinho // <- THIS IS SQL :
+import org.springframework.stereotype.Service
 
-@Servicuzinho
+@Service
 class UserFacadeImpl(
-  val userQuery: UserQuery,
-  val userCreateCommand: UserCreateCommand
+  val userService: UserService
 ) : UserFacade {
 
-  override fun getAll(): UserListResponse = userQuery.all().toUserListResponse()
+  override fun getAll(): UserListResponse = userService.getAll().toUserListResponse()
 
   override fun getById(id: String): UserResponse {
     TODO("Not yet implemented")
@@ -26,5 +24,5 @@ class UserFacadeImpl(
 
   private fun List<User>.toUserListResponse(): UserListResponse = UserListResponse(this.map { it.toUserResponse()})
 
-  private fun User.toUserResponse() = UserResponse(name)
+  private fun User.toUserResponse() = UserResponse(id, name)
 }

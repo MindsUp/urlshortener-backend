@@ -9,4 +9,5 @@ interface UserFacade {
   fun getAll(): UserListResponse
   fun getById(id:String): UserResponse
   fun create(request:UserCreateRequest): UserResponse
+
 }
