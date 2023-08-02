@@ -18,5 +18,4 @@ class UserRestController (val userFacade: UserFacade) {
   @PostMapping
   fun create(@RequestBody request: UserCreateRequest): UserResponse = this.userFacade.create(request)
 
-
 }
