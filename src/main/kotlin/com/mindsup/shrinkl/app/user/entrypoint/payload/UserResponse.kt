@@ -1,4 +1,4 @@
-package com.mindsup.shrinkl.entrypoint.user.payload
+package com.mindsup.shrinkl.app.user.entrypoint.payload
 
 class UserResponse(
   val id: String,

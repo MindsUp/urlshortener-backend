@@ -16,3 +16,6 @@ fun main(args: Array<String>) {
 //-> flow ->
 //-> dependency <-
 // => inject
+
+// app -> controller -> useCase / repository <- DataProvider
+// core -> useCase -> service -> DataProvider
