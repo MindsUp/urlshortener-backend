@@ -11,18 +11,15 @@ import org.springframework.web.bind.annotation.*
 class ShortenedUrlRestController(val facade:ShortenedUrlFacade) {
 
   companion object {
-    private val USER = ShortenedUser("DEFAULT")
+    private val USER = ShortenedUser("11111", "DEFAULT")
   }
-
-  @GetMapping
-  fun getAll(): ShortenedUrlListResponse = this.facade.getAll()
 
   @GetMapping("/")
   fun getAllByUser(): ShortenedUrlListResponse = this.facade.getAllByUser(USER)
 
-  @GetMapping("/{id}")
-  fun getById(@PathVariable id: String): ShortenedUrlResponse = this.facade.getById(id)
+  @GetMapping("/{alias}")
+  fun getByAlias(@PathVariable alias: String): ShortenedUrlResponse = this.facade.getByAlias(alias)
 
   @PostMapping
-  fun create(@RequestBody request: ShortenedUrlCreateRequest): ShortenedUrlResponse = this.facade.create(request)
+  fun create(@RequestBody request: ShortenedUrlCreateRequest): ShortenedUrlResponse = this.facade.create(request, USER)
 }

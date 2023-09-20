@@ -9,3 +9,9 @@ data class ShortenedUrl (
   val full: String,
   val alias: String
 )
+
+data class ShortenedUrlCreation (
+  val owner: User,
+  val full: String,
+  val alias: String
+)

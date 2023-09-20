@@ -2,11 +2,12 @@ package com.mindsup.shrinkl.core.shortenedurl.usecase
 
 import com.mindsup.shrinkl.core.shortenedurl.dataprovider.ShortenedUrlDataProvider
 import com.mindsup.shrinkl.core.shortenedurl.domain.ShortenedUrl
+import com.mindsup.shrinkl.core.shortenedurl.domain.ShortenedUrlCreation
 import com.mindsup.shrinkl.core.user.domain.User
 import org.springframework.stereotype.Service
 
 interface ShortenedUrlUseCase {
-  fun shorten(shortenedUrl: ShortenedUrl)
+  fun shorten(shortenedUrlCreation: ShortenedUrlCreation): ShortenedUrl
   fun retrieveAllFromUser(user: User): List<ShortenedUrl>
   fun retrieveFromAlias(alias: String): ShortenedUrl
 }
@@ -16,16 +17,13 @@ private class UrlShortenerService (
   val shortenedUrlDataProvider: ShortenedUrlDataProvider
 ): ShortenedUrlUseCase {
 
-  override fun shorten(shortenedUrl: ShortenedUrl) {
-    TODO("Not yet implemented")
-  }
+  override fun shorten(shortenedUrlCreation: ShortenedUrlCreation): ShortenedUrl =
+    shortenedUrlDataProvider.save(shortenedUrlCreation)
 
-  override fun retrieveAllFromUser(user: User): List<ShortenedUrl> {
-    TODO("Not yet implemented")
-  }
+  override fun retrieveAllFromUser(user: User): List<ShortenedUrl> =
+    shortenedUrlDataProvider.findAllByUser(user)
 
-  override fun retrieveFromAlias(alias: String): ShortenedUrl {
-    TODO("Not yet implemented")
-  }
+  override fun retrieveFromAlias(alias: String): ShortenedUrl =
+    shortenedUrlDataProvider.findByAlias(alias)
 
 }

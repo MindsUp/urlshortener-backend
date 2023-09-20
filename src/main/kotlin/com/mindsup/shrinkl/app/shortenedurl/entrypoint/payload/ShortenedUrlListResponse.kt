@@ -1,4 +1,3 @@
 package com.mindsup.shrinkl.app.shortenedurl.entrypoint.payload
 
-class ShortenedUrlListResponse {
-}
+data class ShortenedUrlListResponse(val resource: List<ShortenedUrlResponse>)
