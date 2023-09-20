@@ -1,0 +1,18 @@
+management:
+  endpoints:
+    jmx:
+      exposure:
+        include: "*"
+    web:
+      exposure:
+        include: "*"
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/urlshortener
+      #authentication-database: admin
+      #host: localhost
+      database: urlshortener
+      #port: 27017
+      #username: root
+      #password: root

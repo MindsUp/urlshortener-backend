@@ -1,6 +1,10 @@
 package com.mindsup.shrinkl.app.infrastructure
 
 import com.mongodb.MongoClientSettings
+import com.mongodb.MongoCredential
+import com.mongodb.ServerAddress
+import com.mongodb.client.MongoClient
+import com.mongodb.client.MongoClients
 import org.bson.BsonReader
 import org.bson.BsonWriter
 import org.bson.codecs.Codec
@@ -13,6 +17,8 @@ import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import java.util.*
+
 
 @Configuration
 class MongoConfig : AbstractMongoClientConfiguration() {
