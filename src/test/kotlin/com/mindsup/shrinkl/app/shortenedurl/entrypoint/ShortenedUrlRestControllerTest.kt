@@ -2,6 +2,7 @@ package com.mindsup.shrinkl.app.shortenedurl.entrypoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mindsup.shrinkl.app.shortenedurl.entrypoint.payload.ShortenedUrlCreateRequest
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -12,43 +13,32 @@ import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.MongoDBContainer
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.junit.jupiter.Container
+import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Testcontainers
 class ShortenedUrlRestControllerIntegrationTest {
 
    companion object {
      @Container
-     val mongoContainer = GenericContainer(DockerImageName.parse("mongo:6"))
-       .withExposedPorts(27017)
-       .waitingFor(Wait.forLogMessage("(?i).*waiting for connections.*", 1))
+     val mongoContainer: MongoDBContainer = MongoDBContainer(DockerImageName.parse("mongo:7"))
+       .withCommand("mongod")
+        .waitingFor(Wait.forLogMessage("(?i).*Waiting for connections.*", 1))
+       .also {
+         it.start()
+       }
 
-
-     /*@DynamicPropertySource
+     @DynamicPropertySource
      @JvmStatic
      fun mongoProperties(registry: DynamicPropertyRegistry) {
-       registry.add("spring.data.mongodb.uri", mongoContainer::geturl)
-     }*/
+       registry.add("spring.data.mongodb.uri", mongoContainer::getReplicaSetUrl)
+     }
    }
-
-  init {
-      //mongoContainer.start()
-  }
-
- /* @BeforeAll
-  fun setUp(){
-    mongoContainer.start();
-  }
-
-  @AfterAll
-  fun tearDown(){
-    mongoContainer.stop();
-  }*/
 
   @Autowired
   private lateinit var mockMvc: MockMvc

@@ -9,10 +9,10 @@ management:
 spring:
   data:
    mongodb:
-     uri: mongodb://localhost:27017/urlshortener
-     #authentication-database: admin
-     #host: localhost123
-     database: urlshortener
-     #port: 27017
-     #username: root
-     #password: root
+     uri: mongodb://shortener:not-so-short-password@localhost:27017/urlshortener?authSource=urlshortener
+#     authentication-database: admin
+#     host: localhost
+#     database: urlshortener
+#     port: 27017
+#     username: shortener
+#     password: not-so-short-password

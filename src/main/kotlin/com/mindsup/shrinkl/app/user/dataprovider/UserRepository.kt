@@ -5,6 +5,7 @@ import com.mindsup.shrinkl.app.user.dataprovider.entity.UserEntity
 import com.mindsup.shrinkl.core.user.dataprovider.UserDataProvider
 import com.mindsup.shrinkl.core.user.domain.UserCreation
 import org.springframework.stereotype.Repository
+import java.time.ZonedDateTime
 
 @Repository
 class UserRepository(val userJpa: UserJpa) : UserDataProvider {
@@ -16,7 +17,7 @@ class UserRepository(val userJpa: UserJpa) : UserDataProvider {
 
   private fun UserEntity.toDomain() = id?.let { User(it, name) } ?:
     throw IllegalArgumentException("Id not populated from DB")
-  private fun UserCreation.toEntity() = UserEntity(name = name)
+  private fun UserCreation.toEntity() = UserEntity(name = name, createdAt = ZonedDateTime.now().toString())
 
 }
 
