@@ -1,17 +1,17 @@
 package com.mindsup.shrinkl.app.infrastructure
 
-import com.mindsup.shrinkl.app.infrastructure.converter.DateToZonedDateTimeConverter
-import com.mindsup.shrinkl.app.infrastructure.converter.ZonedDateTimeToDateConverter
-import com.mongodb.MongoClientSettings
-import com.mongodb.MongoCredential
-import com.mongodb.ServerAddress
+import com.mindsup.shrinkl.app.infrastructure.converter.StringToZonedDateTimeConverter
+import com.mindsup.shrinkl.app.infrastructure.converter.ZonedDateTimeToStringConverter
+import com.mongodb.*
+import com.mongodb.client.gridfs.codecs.GridFSFileCodecProvider
+import com.mongodb.client.model.geojson.codecs.GeoJsonCodecProvider
 import com.mongodb.connection.ClusterSettings
 import org.bson.BsonReader
+import org.bson.BsonType
 import org.bson.BsonWriter
-import org.bson.codecs.Codec
-import org.bson.codecs.DecoderContext
-import org.bson.codecs.EncoderContext
+import org.bson.codecs.*
 import org.bson.codecs.configuration.CodecRegistries
+import org.bson.codecs.jsr310.Jsr310CodecProvider
 import org.springframework.boot.autoconfigure.mongo.MongoProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration
@@ -19,7 +19,6 @@ import org.springframework.data.mongodb.core.convert.MongoCustomConversions
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import java.util.*
 
 
 @Configuration
@@ -30,11 +29,31 @@ class MongoConfig (val properties:MongoProperties) : AbstractMongoClientConfigur
   }
 
   override fun configureClientSettings(builder: MongoClientSettings.Builder) {
+    val replacement: Map<BsonType, Class<*>> = mapOf(BsonType.DATE_TIME to  ZonedDateTime::class.java)
     builder
       .codecRegistry(CodecRegistries
         .fromRegistries(
-          MongoClientSettings.getDefaultCodecRegistry(),
-          CodecRegistries.fromCodecs(ZonedDateTimeCodec())
+          CodecRegistries.fromProviders(
+            listOf(
+              ValueCodecProvider(),
+              BsonValueCodecProvider(),
+              DBRefCodecProvider(),
+              DBObjectCodecProvider(),
+              DocumentCodecProvider(BsonTypeClassMap(replacement), DocumentToDBRefTransformer()),
+              CollectionCodecProvider(DocumentToDBRefTransformer()),
+              IterableCodecProvider(DocumentToDBRefTransformer()),
+              MapCodecProvider(DocumentToDBRefTransformer()),
+              GeoJsonCodecProvider(),
+              GridFSFileCodecProvider(),
+              Jsr310CodecProvider(),
+              JsonObjectCodecProvider(),
+              BsonCodecProvider(),
+              EnumCodecProvider(),
+              Jep395RecordCodecProvider()
+            )
+          ),
+          CodecRegistries.fromCodecs(ZonedDateTimeCodec()),
+//          MongoClientSettings.getDefaultCodecRegistry()
       ))
       .credential(MongoCredential
         .createCredential(
@@ -51,8 +70,8 @@ class MongoConfig (val properties:MongoProperties) : AbstractMongoClientConfigur
   override fun customConversions(): MongoCustomConversions {
     return MongoCustomConversions(
         listOf(
-          ZonedDateTimeToDateConverter(),
-          DateToZonedDateTimeConverter()
+          ZonedDateTimeToStringConverter(),
+          StringToZonedDateTimeConverter()
       ))
   }
 

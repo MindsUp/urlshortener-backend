@@ -4,13 +4,10 @@ import org.springframework.core.convert.converter.Converter
 import org.springframework.data.convert.WritingConverter
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Date
 
 @WritingConverter
-class ZonedDateTimeToDateConverter : Converter<ZonedDateTime, Date> {
+class ZonedDateTimeToStringConverter : Converter<ZonedDateTime, String> {
   //DateToLocalDateTimeConverter
-  override fun convert(zonedDateTime: ZonedDateTime): Date {
-    return Date.from(zonedDateTime.toInstant());
-  }
+  override fun convert(zonedDateTime: ZonedDateTime): String = zonedDateTime.format(DateTimeFormatter.ISO_DATE_TIME)
 
 }
