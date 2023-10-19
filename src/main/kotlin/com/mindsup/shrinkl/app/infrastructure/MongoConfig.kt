@@ -1,5 +1,7 @@
 package com.mindsup.shrinkl.app.infrastructure
 
+import com.mindsup.shrinkl.app.infrastructure.converter.DateToZonedDateTimeConverter
+import com.mindsup.shrinkl.app.infrastructure.converter.ZonedDateTimeToDateConverter
 import com.mongodb.MongoClientSettings
 import com.mongodb.MongoCredential
 import com.mongodb.ServerAddress
@@ -10,12 +12,10 @@ import org.bson.codecs.Codec
 import org.bson.codecs.DecoderContext
 import org.bson.codecs.EncoderContext
 import org.bson.codecs.configuration.CodecRegistries
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.mongo.MongoProperties
-import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -46,6 +46,14 @@ class MongoConfig (val properties:MongoProperties) : AbstractMongoClientConfigur
           listOf(ServerAddress(this.properties.host, this.properties.port))
         )
       }
+  }
+
+  override fun customConversions(): MongoCustomConversions {
+    return MongoCustomConversions(
+        listOf(
+          ZonedDateTimeToDateConverter(),
+          DateToZonedDateTimeConverter()
+      ))
   }
 
   class ZonedDateTimeCodec : Codec<ZonedDateTime> {
