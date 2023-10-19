@@ -3,15 +3,17 @@ package com.mindsup.shrinkl.app.infrastructure
 import com.mongodb.MongoClientSettings
 import com.mongodb.MongoCredential
 import com.mongodb.ServerAddress
-import com.mongodb.client.MongoClient
-import com.mongodb.client.MongoClients
+import com.mongodb.connection.ClusterSettings
 import org.bson.BsonReader
 import org.bson.BsonWriter
-import org.bson.UuidRepresentation
 import org.bson.codecs.Codec
 import org.bson.codecs.DecoderContext
 import org.bson.codecs.EncoderContext
 import org.bson.codecs.configuration.CodecRegistries
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.mongo.MongoProperties
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration
 import java.time.Instant
@@ -20,45 +22,31 @@ import java.time.ZonedDateTime
 import java.util.*
 
 
-
 @Configuration
-class MongoConfig : AbstractMongoClientConfiguration() {
-
-//  @Value("\${spring.data.mongodb.database}")
-//  lateinit var dbname: String
-//
-//  @Value("\${spring.data.mongodb.username}")
-//  lateinit var user: String
-//
-//  @Value("\${spring.data.mongodb.password}")
-//  lateinit var pwd: String
+class MongoConfig (val properties:MongoProperties) : AbstractMongoClientConfiguration() {
 
   override fun getDatabaseName(): String {
-    return "urlshortener"
+    return this.properties.database
   }
 
-//  public override fun configureClientSettings(builder: MongoClientSettings.Builder) {
-//    val codecRegistry = CodecRegistries.fromRegistries(
-//      MongoClientSettings.getDefaultCodecRegistry(),
-//      CodecRegistries.fromCodecs(ZonedDateTimeCodec())
-//    )
-//    builder.codecRegistry(codecRegistry)
-//  }
-
-//  override fun co
-
-//  override fun mongoClientSettings(): MongoClientSettings {
-//    val codecRegistry = CodecRegistries.fromRegistries(
-//      MongoClientSettings.getDefaultCodecRegistry(),
-//      CodecRegistries.fromCodecs(ZonedDateTimeCodec())
-//    )
-//
-//    return MongoClientSettings.builder()
-//      .credential(MongoCredential.createCredential(user, dbname, pwd.toCharArray()))
-//      .applyToClusterSettings { settings -> settings.hosts(listOf(ServerAddress("127.0.0.1", 27017))) }
-//      .codecRegistry(codecRegistry)
-//      .build()
-//  }
+  override fun configureClientSettings(builder: MongoClientSettings.Builder) {
+    builder
+      .codecRegistry(CodecRegistries
+        .fromRegistries(
+          MongoClientSettings.getDefaultCodecRegistry(),
+          CodecRegistries.fromCodecs(ZonedDateTimeCodec())
+      ))
+      .credential(MongoCredential
+        .createCredential(
+          this.properties.username,
+          this.properties.database,
+          this.properties.password))
+      .applyToClusterSettings { settings: ClusterSettings.Builder ->
+        settings.hosts(
+          listOf(ServerAddress(this.properties.host, this.properties.port))
+        )
+      }
+  }
 
   class ZonedDateTimeCodec : Codec<ZonedDateTime> {
     override fun getEncoderClass(): Class<ZonedDateTime> {

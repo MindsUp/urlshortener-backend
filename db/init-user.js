@@ -1,5 +1,3 @@
-// print("######### passei aqui osh")
-
 db = db.getSiblingDB("urlshortener")
 db.createUser(
   {
@@ -13,6 +11,3 @@ db.createUser(
     ]
   }
 )
-db.createCollection("test");
-
-// print("######### passei aqui carai")
