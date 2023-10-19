@@ -19,6 +19,6 @@ class UserFacade(
 
   fun create(request: UserCreateRequest) = userUseCase.create(request.toDomain()).toPayload()
 
-  private fun User.toPayload() = UserResponse(id, name)
+  private fun User.toPayload() = UserResponse(id, name, createdAt)
   private fun UserCreateRequest.toDomain() = UserCreation(name)
 }

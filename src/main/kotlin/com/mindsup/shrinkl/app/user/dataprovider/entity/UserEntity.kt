@@ -11,5 +11,5 @@ class UserEntity (
   var id: String? = null,
   var name: String,
   @CreatedDate
-  var createdAt: String
+  var createdAt: ZonedDateTime
 )

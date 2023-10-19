@@ -3,6 +3,7 @@ package com.mindsup.shrinkl.app.shortenedurl.entrypoint
 import com.mindsup.shrinkl.app.shortenedurl.entrypoint.payload.ShortenedUrlCreateRequest
 import com.mindsup.shrinkl.app.shortenedurl.entrypoint.payload.ShortenedUrlListResponse
 import com.mindsup.shrinkl.app.shortenedurl.entrypoint.payload.ShortenedUrlResponse
+import com.mindsup.shrinkl.core.shortenedurl.domain.ShortenedUser
 import org.springframework.web.bind.annotation.*
 
 

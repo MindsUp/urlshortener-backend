@@ -15,9 +15,9 @@ class UserRepository(val userJpa: UserJpa) : UserDataProvider {
   override fun findById(id: String) = userJpa.findById(id)
     .orElseThrow { IllegalArgumentException("User not Found") }.toDomain()
 
-  private fun UserEntity.toDomain() = id?.let { User(it, name) } ?:
+  private fun UserEntity.toDomain() = id?.let { User(it, name, createdAt) } ?:
     throw IllegalArgumentException("Id not populated from DB")
-  private fun UserCreation.toEntity() = UserEntity(name = name, createdAt = ZonedDateTime.now().toString())
+  private fun UserCreation.toEntity() = UserEntity(name = name, createdAt = ZonedDateTime.now())
 
 }
 

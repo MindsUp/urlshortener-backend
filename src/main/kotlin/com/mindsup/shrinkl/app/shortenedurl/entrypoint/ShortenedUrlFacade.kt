@@ -5,9 +5,11 @@ import com.mindsup.shrinkl.app.shortenedurl.entrypoint.payload.ShortenedUrlListR
 import com.mindsup.shrinkl.app.shortenedurl.entrypoint.payload.ShortenedUrlResponse
 import com.mindsup.shrinkl.core.shortenedurl.domain.ShortenedUrl
 import com.mindsup.shrinkl.core.shortenedurl.domain.ShortenedUrlCreation
+import com.mindsup.shrinkl.core.shortenedurl.domain.ShortenedUser
 import com.mindsup.shrinkl.core.shortenedurl.usecase.ShortenedUrlUseCase
 import com.mindsup.shrinkl.core.user.domain.User
 import org.springframework.stereotype.Component
+import java.time.ZonedDateTime
 
 @Component
 class ShortenedUrlFacade(val useCase: ShortenedUrlUseCase) {
@@ -22,7 +24,7 @@ class ShortenedUrlFacade(val useCase: ShortenedUrlUseCase) {
   fun create(request: ShortenedUrlCreateRequest, user:ShortenedUser): ShortenedUrlResponse =
     useCase.shorten(toDomain(request, user)).toResponse()
 
-  private fun ShortenedUser.toDomain() = User("", name = name)
+  private fun ShortenedUser.toDomain() = ShortenedUser(id, name)
 
   private fun ShortenedUrl.toResponse() =
     ShortenedUrlResponse(
@@ -35,15 +37,12 @@ class ShortenedUrlFacade(val useCase: ShortenedUrlUseCase) {
     ShortenedUrlCreation(
       alias = request.alias,
       full = request.url,
-      owner = User(
+      owner = ShortenedUser(
         id = user.id,
-        name = user.name
+        name = user.name,
       )
     )
 
 }
 
-data class ShortenedUser(
-  val id: String,
-  val name: String
-)
+
