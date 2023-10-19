@@ -11,7 +11,6 @@ import org.bson.BsonWriter
 import org.bson.codecs.Codec
 import org.bson.codecs.DecoderContext
 import org.bson.codecs.EncoderContext
-import org.bson.codecs.configuration.CodecRegistries
 import org.springframework.boot.autoconfigure.mongo.MongoProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration
@@ -19,8 +18,6 @@ import org.springframework.data.mongodb.core.convert.MongoCustomConversions
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import java.util.*
-
 
 @Configuration
 class MongoConfig (val properties:MongoProperties) : AbstractMongoClientConfiguration() {
@@ -31,11 +28,6 @@ class MongoConfig (val properties:MongoProperties) : AbstractMongoClientConfigur
 
   override fun configureClientSettings(builder: MongoClientSettings.Builder) {
     builder
-      .codecRegistry(CodecRegistries
-        .fromRegistries(
-          MongoClientSettings.getDefaultCodecRegistry(),
-          CodecRegistries.fromCodecs(ZonedDateTimeCodec())
-      ))
       .credential(MongoCredential
         .createCredential(
           this.properties.username,
@@ -54,20 +46,5 @@ class MongoConfig (val properties:MongoProperties) : AbstractMongoClientConfigur
           ZonedDateTimeToDateConverter(),
           DateToZonedDateTimeConverter()
       ))
-  }
-
-  class ZonedDateTimeCodec : Codec<ZonedDateTime> {
-    override fun getEncoderClass(): Class<ZonedDateTime> {
-      return ZonedDateTime::class.java
-    }
-
-    override fun encode(writer: BsonWriter, value: ZonedDateTime, encoderContext: EncoderContext) {
-      writer.writeDateTime(value.toInstant().toEpochMilli())
-    }
-
-    override fun decode(reader: BsonReader, decoderContext: DecoderContext): ZonedDateTime {
-      val epochMillis = reader.readDateTime()
-      return ZonedDateTime.ofInstant(Instant.ofEpochMilli(epochMillis), ZoneOffset.UTC)
-    }
   }
 }
