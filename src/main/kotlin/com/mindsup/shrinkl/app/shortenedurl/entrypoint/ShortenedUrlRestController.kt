@@ -7,6 +7,7 @@ import com.mindsup.shrinkl.core.shortenedurl.domain.ShortenedUser
 import org.springframework.web.bind.annotation.*
 
 
+@CrossOrigin("*")
 @RequestMapping("/v1/shortened-url")
 @RestController
 class ShortenedUrlRestController(val facade:ShortenedUrlFacade) {
@@ -15,7 +16,7 @@ class ShortenedUrlRestController(val facade:ShortenedUrlFacade) {
     private val USER = ShortenedUser("11111", "DEFAULT")
   }
 
-  @GetMapping("/")
+  @GetMapping("")
   fun getAllByUser(): ShortenedUrlListResponse = this.facade.getAllByUser(USER)
 
   @GetMapping("/{alias}")
