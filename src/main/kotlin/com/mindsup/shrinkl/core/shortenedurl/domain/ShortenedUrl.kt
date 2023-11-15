@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 data class ShortenedUrl (
   val owner: ShortenedUser,
-  val creationDateTime: LocalDateTime,
+  val createdAt: LocalDateTime,
   val full: String,
   val alias: String
 )

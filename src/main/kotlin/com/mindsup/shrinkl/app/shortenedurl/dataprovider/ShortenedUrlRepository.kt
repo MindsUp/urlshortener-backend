@@ -48,7 +48,7 @@ class ShortenedUrlRepository(
   private fun ShortenedUrlEntity.toDomain(): ShortenedUrl {
     return ShortenedUrl(
       owner = this.owner.toDomain(),
-      creationDateTime = this.createdAt.toLocalDateTime(),
+      createdAt = this.createdAt.toLocalDateTime(),
       full = this.full,
       alias = this.alias
     )

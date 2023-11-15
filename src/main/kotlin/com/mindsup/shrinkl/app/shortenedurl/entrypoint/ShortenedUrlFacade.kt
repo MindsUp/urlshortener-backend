@@ -32,7 +32,7 @@ class ShortenedUrlFacade(val useCase: ShortenedUrlUseCase) {
 
   private fun ShortenedUrl.toResponse() =
     ShortenedUrlResponse(
-      url = full, alias = alias, creationDateTime = creationDateTime.toString()
+      url = full, alias = alias, createdAt = createdAt.toString()
     )
 
   private fun List<ShortenedUrlResponse>.toListResponse() = ShortenedUrlListResponse(this)
