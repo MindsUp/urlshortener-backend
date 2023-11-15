@@ -11,6 +11,7 @@ interface ShortenedUrlUseCase {
   fun shorten(shortenedUrlCreation: ShortenedUrlCreation): ShortenedUrl
   fun retrieveAllFromUser(user: ShortenedUser): List<ShortenedUrl>
   fun retrieveFromAlias(alias: String): ShortenedUrl
+  fun deleteByAlias(alias: String)
 }
 
 @Service
@@ -26,5 +27,9 @@ private class UrlShortenerService (
 
   override fun retrieveFromAlias(alias: String): ShortenedUrl =
     shortenedUrlDataProvider.findByAlias(alias)
+
+  override fun deleteByAlias(alias: String) {
+    shortenedUrlDataProvider.deleteByAlias(alias)
+  }
 
 }

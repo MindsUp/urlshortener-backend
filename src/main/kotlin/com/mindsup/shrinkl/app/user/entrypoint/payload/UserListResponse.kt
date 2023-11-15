@@ -1,5 +1,5 @@
 package com.mindsup.shrinkl.app.user.entrypoint.payload
 
-class UserListResponse(
+data class UserListResponse(
   val resource: List<UserResponse>
 )

@@ -6,7 +6,9 @@ import com.mindsup.shrinkl.core.shortenedurl.dataprovider.ShortenedUrlDataProvid
 import com.mindsup.shrinkl.core.shortenedurl.domain.ShortenedUrl
 import com.mindsup.shrinkl.core.shortenedurl.domain.ShortenedUrlCreation
 import com.mindsup.shrinkl.core.shortenedurl.domain.ShortenedUser
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Repository
+import org.springframework.web.server.ResponseStatusException
 import java.time.ZonedDateTime
 
 @Repository
@@ -33,6 +35,14 @@ class ShortenedUrlRepository(
   override fun findByAlias(alias: String): ShortenedUrl {
     val shortenedUrlEntity = shortenedUrlJpa.findByAlias(alias)
     return shortenedUrlEntity.toDomain()
+  }
+
+  override fun deleteByAlias(alias: String) {
+    shortenedUrlJpa.deleteByAlias(alias).also {
+      if(it == 0L) {
+        throw ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found")
+      }
+    }
   }
 
   private fun ShortenedUrlEntity.toDomain(): ShortenedUrl {

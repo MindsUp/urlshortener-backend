@@ -4,6 +4,7 @@ import com.mindsup.shrinkl.app.shortenedurl.entrypoint.payload.ShortenedUrlCreat
 import com.mindsup.shrinkl.app.shortenedurl.entrypoint.payload.ShortenedUrlListResponse
 import com.mindsup.shrinkl.app.shortenedurl.entrypoint.payload.ShortenedUrlResponse
 import com.mindsup.shrinkl.core.shortenedurl.domain.ShortenedUser
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 
@@ -24,4 +25,10 @@ class ShortenedUrlRestController(val facade:ShortenedUrlFacade) {
 
   @PostMapping
   fun create(@RequestBody request: ShortenedUrlCreateRequest): ShortenedUrlResponse = this.facade.create(request, USER)
+
+  @DeleteMapping("/{alias}")
+  fun deleteByAlias(@PathVariable alias: String): ResponseEntity<Void> {
+    this.facade.deleteByAlias(alias)
+    return ResponseEntity.noContent().build()
+  }
 }

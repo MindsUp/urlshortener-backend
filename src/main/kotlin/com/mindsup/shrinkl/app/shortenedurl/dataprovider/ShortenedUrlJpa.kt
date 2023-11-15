@@ -7,4 +7,5 @@ import org.springframework.data.repository.CrudRepository
 interface ShortenedUrlJpa: CrudRepository<ShortenedUrlEntity, String> {
   fun findByOwnerId(userId: String): List<ShortenedUrlEntity>
   fun findByAlias(alias: String): ShortenedUrlEntity
+  fun deleteByAlias(alias: String): Long
 }

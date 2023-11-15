@@ -24,6 +24,10 @@ class ShortenedUrlFacade(val useCase: ShortenedUrlUseCase) {
   fun create(request: ShortenedUrlCreateRequest, user:ShortenedUser): ShortenedUrlResponse =
     useCase.shorten(toDomain(request, user)).toResponse()
 
+  fun deleteByAlias(alias: String) {
+    useCase.deleteByAlias(alias)
+  }
+
   private fun ShortenedUser.toDomain() = ShortenedUser(id, name)
 
   private fun ShortenedUrl.toResponse() =

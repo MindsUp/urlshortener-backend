@@ -8,4 +8,5 @@ interface ShortenedUrlDataProvider {
   fun save(shortenedUrlCreation: ShortenedUrlCreation): ShortenedUrl
   fun findAllByUser(user: ShortenedUser): List<ShortenedUrl>
   fun findByAlias(alias: String): ShortenedUrl
+  fun deleteByAlias(alias: String)
 }
