@@ -24,9 +24,9 @@ import java.time.ZonedDateTime
 @Configuration
 class MongoConfig (val properties:MongoProperties) : AbstractMongoClientConfiguration() {
 
-  override fun getDatabaseName(): String {
-    return this.properties.database
-  }
+  override fun getDatabaseName(): String = this.properties.database
+
+  override fun autoIndexCreation() = true
 
   override fun configureClientSettings(builder: MongoClientSettings.Builder) {
     val replacement: Map<BsonType, Class<*>> = mapOf(BsonType.DATE_TIME to  ZonedDateTime::class.java)

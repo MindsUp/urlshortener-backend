@@ -6,6 +6,7 @@ import com.mindsup.shrinkl.core.shortenedurl.dataprovider.ShortenedUrlDataProvid
 import com.mindsup.shrinkl.core.shortenedurl.domain.ShortenedUrl
 import com.mindsup.shrinkl.core.shortenedurl.domain.ShortenedUrlCreation
 import com.mindsup.shrinkl.core.shortenedurl.domain.ShortenedUser
+import org.springframework.dao.DuplicateKeyException
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Repository
 import org.springframework.web.server.ResponseStatusException
@@ -23,8 +24,12 @@ class ShortenedUrlRepository(
       full = shortenedUrlCreation.full,
       alias = shortenedUrlCreation.alias
     )
-    val savedEntity = shortenedUrlJpa.save(shortenedUrlEntity)
-    return savedEntity.toDomain()
+    return try {
+      val savedEntity = shortenedUrlJpa.save(shortenedUrlEntity)
+      savedEntity.toDomain()
+    } catch (e: DuplicateKeyException) {
+      throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Alias already exists")
+    }
   }
 
   override fun findAllByUser(user: ShortenedUser): List<ShortenedUrl> {

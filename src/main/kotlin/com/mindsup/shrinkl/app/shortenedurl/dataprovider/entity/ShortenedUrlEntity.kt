@@ -1,6 +1,7 @@
 package com.mindsup.shrinkl.app.shortenedurl.dataprovider.entity
 
 import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import java.time.ZonedDateTime
 
@@ -11,6 +12,7 @@ class ShortenedUrlEntity (
   val owner: ShortenedUrlUserEntity,
   val createdAt: ZonedDateTime,
   val full: String,
+  @Indexed(unique = true)
   val alias: String
 )
 
